@@ -1,24 +1,20 @@
-
-
 pipeline {
     agent any
     stages {
         stage('Clone') {
             steps {
-                git branch: 'main', url: 'https://github.com/HamNP/web-simple.git'
+                git 'https://github.com/HamNP/web-simple.git'
             }
         }
         stage('Build Docker Image') {
             steps {
-    sh 'export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH && docker build -t my-web-cicd .'
+                bat 'docker build -t my-web-cicd .'
             }
         }
         stage('Run Container') {
-            steps { sh '''
-  export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH
-                docker rm -f my-web || true
-                docker run -d --name my-web -p 9090:80 my-web-cicd
-         '''
+            steps {
+                bat 'docker rm -f my-web || exit 0'
+                bat 'docker run -d --name my-web -p 5000:80 my-web-cicd'
             }
         }
     }
