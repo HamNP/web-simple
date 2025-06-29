@@ -6,6 +6,11 @@ pipeline {
                git branch: 'main', url: 'https://github.com/HamNP/web-simple.git'
            }
        }
+       stage('Check Docker') {
+    steps {
+        sh 'which docker && docker --version'
+    }
+}
        stage('Build Docker Image') {
            steps {
                sh 'docker build -t my-web-cicd .'
